@@ -1,0 +1,46 @@
+dataset: SynthRAD
+source_domain: mri
+target_domain: ct
+data_path: /home/user/FedMed-GAN-main/synthrad
+valid_path: /home/user/FedMed-GAN-main/synthrad
+data_mode: 'mixed'
+data_num: 4320 #1080 per client training 36*30  Number of slices of data points per client 4320 total
+data_paired_weight: 0.5 #because all the data is paired when mixed mode is used
+data_moda_ratio: 0
+data_moda_case: 'case1'
+data_partition: manual
+es_higher_limit: 115 # 160
+es_lower_limit: 85 #  90
+size: 224 #Dimensions of the image?
+num_img_save: 3
+single_img_infer: true
+assigned_images: [['1BA054.npy', '1BA054.npy', 100], 
+                  ['1BA097.npy', '1BA097.npy', 100],
+                  ['1BA141.npy', '1BA141.npy', 100],
+                  ['1BA164.npy', '1BA164.npy', 100],
+                  ['1BA227.npy', '1BA227.npy', 100],
+                  ['1BA305.npy', '1BA305.npy', 100],
+                  ['1BB002.npy', '1BB002.npy', 100],
+                  ['1BB028.npy', '1BB028.npy', 100],
+                  ['1BB050.npy', '1BB050.npy', 100],
+                  ['1BB073.npy', '1BB073.npy', 100], 
+                  ['1BB095.npy', '1BB095.npy', 100],
+                  ['1BB102.npy', '1BB102.npy', 100],
+                  ['1BB182.npy', '1BB182.npy', 100],
+                  ['1BC007.npy', '1BC007.npy', 100],
+                  ['1BC008.npy', '1BC008.npy', 100],
+                  ['1BC025.npy', '1BC025.npy', 100],
+                  ['1BC041.npy', '1BC041.npy', 100],
+                  ['1BC046.npy', '1BC046.npy', 100],
+                  ['1BC052.npy', '1BC052.npy', 100], 
+                  ['1BC053.npy', '1BC053.npy', 100]] 
+
+# Assigned Images is the test dataset
+# Format: [Image name in file, Image name, slice]
+
+
+# if the asked us why did we split the data manually
+# Considerations
+# Compatibility with Federated Learning: Since FedMed-GAN involves federated learning, consider how splitting the dataset affects the distribution of data across clients if applicable. Federated learning often requires careful consideration of how data is distributed to simulate real-world scenarios accurately.
+# Reproducibility: Use the random_state parameter to ensure reproducibility of your dataset splits.
+# Data Leakage: Ensure that any preprocessing steps do not inadvertently cause data leakage between your training and test sets. Preprocess the data separately if necessary.
