@@ -1,0 +1,159 @@
+a_mu: 0.0
+a_sigma: 1.0
+angle_list:
+- 90.0
+- 180.0
+- 270.0
+assigned_images:
+- - 1BA054.npy
+  - 1BA054.npy
+  - 100
+- - 1BA097.npy
+  - 1BA097.npy
+  - 100
+- - 1BA141.npy
+  - 1BA141.npy
+  - 100
+- - 1BA164.npy
+  - 1BA164.npy
+  - 100
+- - 1BA227.npy
+  - 1BA227.npy
+  - 100
+- - 1BA305.npy
+  - 1BA305.npy
+  - 100
+- - 1BB002.npy
+  - 1BB002.npy
+  - 100
+- - 1BB028.npy
+  - 1BB028.npy
+  - 100
+- - 1BB050.npy
+  - 1BB050.npy
+  - 100
+- - 1BB073.npy
+  - 1BB073.npy
+  - 100
+- - 1BB095.npy
+  - 1BB095.npy
+  - 100
+- - 1BB102.npy
+  - 1BB102.npy
+  - 100
+- - 1BB182.npy
+  - 1BB182.npy
+  - 100
+- - 1BC007.npy
+  - 1BC007.npy
+  - 100
+- - 1BC008.npy
+  - 1BC008.npy
+  - 100
+- - 1BC025.npy
+  - 1BC025.npy
+  - 100
+- - 1BC041.npy
+  - 1BC041.npy
+  - 100
+- - 1BC046.npy
+  - 1BC046.npy
+  - 100
+- - 1BC052.npy
+  - 1BC052.npy
+  - 100
+- - 1BC053.npy
+  - 1BC053.npy
+  - 100
+auxiliary_rotation: false
+auxiliary_scaling: false
+auxiliary_translation: false
+b_mu: 0.0
+b_sigma: 1.0
+batch_size: 8
+batch_size_inceptionV3: 8
+beta1: 0.5
+beta2: 0.999
+clients_data_weight:
+- 0.25
+- 0.25
+- 0.25
+- 0.25
+clip_bound: false
+contraD: false
+cyg_dis_inc: 1
+cyg_dis_ndf: 64
+data_moda_case: case1
+data_moda_ratio: 0
+data_mode: paired
+data_num: 4320
+data_paired_weight: 0.5
+data_partition: manual
+data_path: /home/user/FedMed-GAN-main/synthrad
+dataset: synthrad
+debug: false
+decay_epoch: 2
+diff_privacy: false
+es_higher_limit: 115
+es_lower_limit: 85
+fed_aggregate_method: fed-avg
+federated: true
+fid: false
+fid_dir: ./fid_stats
+gpu_id: 0
+gpu_ids:
+- '01234567'
+identity: true
+lambda_content: 1.0
+lambda_corr: 20
+lambda_cyc: 10.0
+lambda_gan: 1.0
+lambda_identity: 10.0
+lambda_smooth: 10
+lambda_style: 1.0
+load_model: false
+load_model_dir: None
+lr: 0.0001
+model: cyclegan
+noise_level: 3
+noise_multiplier: None
+noise_type: normal
+not_test_client: false
+num_augmentation: one
+num_clients: 4
+num_epoch: 3
+num_img_save: 3
+num_round: 20
+num_workers: 8
+plot_distribution: false
+plot_num_sample: 2000
+reg_gan: false
+save_img: true
+save_log: true
+save_model: true
+scaling_list:
+- 0.9
+- 1.1
+- 1.2
+seed: 3
+sensitivity: false
+severe_rotation: 90
+severe_scaling: 0.1
+severe_translation: 0.12
+single_img_infer: true
+size: 224
+source_domain: mri
+target_domain: ct
+temp: 0.1
+translation_list:
+- 30.0
+valid_path: /home/user/FedMed-GAN-main/synthrad
+weight_rotation_loss_d: 1.0
+weight_rotation_loss_g: 0.5
+weight_scaling_loss_d: 1.0
+weight_scaling_loss_g: 0.5
+weight_simclr_loss: 0.01
+weight_supercon_loss: 0.01
+weight_translation_loss_d: 1.0
+weight_translation_loss_g: 0.5
+work_dir: ./work_dir

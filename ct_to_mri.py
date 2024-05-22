@@ -49,7 +49,7 @@ if __name__ == "__main__":
     if not os.path.exists(args.output_dir):
         os.makedirs(args.output_dir)
 
-    generator_path = '/home/user/FedMed-GAN-main/work_dir/federated/synthrad/Without Self-Attention/checkpoint/g_from_b_to_a/best_model_mri_ct_13.1696.pth'
+    generator_path = '/home/user/FedMed-GAN-main/work_dir/federated/synthrad/Self-Attention/checkpoint/g_from_b_to_a/best_model_mri_ct_13.7941.pth'
     generator = load_generator(generator_path)
     image_tensor = load_image(args.image_path)
     input_image = image_tensor.squeeze().cpu().numpy()
