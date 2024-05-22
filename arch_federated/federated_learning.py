@@ -83,41 +83,9 @@ class FederatedTrain():
     def load_data(self):
         self.normal_transform = [{'size':(self.para_dict['size'], self.para_dict['size'])},
                                     {'size':(self.para_dict['size'], self.para_dict['size'])}]
-        # self.normal_transform = [{'degrees':0, 'translate':[0.00, 0.00],
-        #                              'scale':[1.00, 1.00], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])},
-        #                             {'degrees':0, 'translate':[0.00, 0.00],
-        #                              'scale':[1.00, 1.00], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])}]
-        # self.gaussian_transform = [{'mu':self.para_dict['a_mu'], 'sigma':self.para_dict['a_sigma'],
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])},
-        #                             {'mu':self.para_dict['b_mu'], 'sigma':self.para_dict['b_sigma'],
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])}]
-        # self.slight_transform = [{'degrees': self.para_dict['noise_level'], 
-        #                              'translate': [0.02*self.para_dict['noise_level'], 0.02*self.para_dict['noise_level']],
-        #                              'scale':[1-0.02*self.para_dict['noise_level'], 1-0.02*self.para_dict['noise_level']], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])},
-        #                             {'degrees': self.para_dict['noise_level'], 
-        #                              'translate': [0.02*self.para_dict['noise_level'], 0.02*self.para_dict['noise_level']],
-        #                              'scale':[1-0.02*self.para_dict['noise_level'], 1-0.02*self.para_dict['noise_level']], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])}]
-        # self.severe_transform = [{'degrees':self.para_dict['severe_rotation'], 
-        #                              'translate':[self.para_dict['severe_translation'], self.para_dict['severe_translation']],
-        #                              'scale':[1-self.para_dict['severe_scaling'], 1+self.para_dict['severe_scaling']], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])},
-        #                             {'degrees':self.para_dict['severe_rotation'], 
-        #                              'translate':[self.para_dict['severe_translation'], self.para_dict['severe_translation']],
-        #                              'scale':[1-self.para_dict['severe_scaling'], 1+self.para_dict['severe_scaling']], 
-        #                              'size':(self.para_dict['size'], self.para_dict['size'])}]
 
         if self.para_dict['noise_type'] == 'normal':
             self.noise_transform = self.normal_transform
-        # elif self.para_dict['noise_type'] == 'gaussian':
-        #     self.noise_transform = self.gaussian_transform
-        # elif self.para_dict['noise_type'] == 'slight':
-        #     self.noise_transform = self.slight_transform
-        # elif self.para_dict['noise_type'] == 'severe': 
-        #     self.noise_transform = self.severe_transform
         else:
             raise NotImplementedError('New Noise Has not been Implemented')
 
@@ -145,7 +113,7 @@ class FederatedTrain():
                                            noise_type=self.para_dict['noise_type'],
                                            learn_mode='test',
                                            extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
-                                           transform_data=self.severe_transform,
+                                           transform_data=self.noise_transform,
                                            data_mode='paired',
                                            assigned_data=self.para_dict['single_img_infer'],
                                            assigned_images=self.para_dict['assigned_images']) 
@@ -154,7 +122,7 @@ class FederatedTrain():
                                            noise_type=self.para_dict['noise_type'],
                                            learn_mode='test',
                                            extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
-                                           transform_data=self.severe_transform,
+                                           transform_data=self.noise_transform,
                                            data_mode='paired',
                                            assigned_data=self.para_dict['single_img_infer'],
                                            assigned_images=self.para_dict['assigned_images']) 
@@ -186,8 +154,6 @@ class FederatedTrain():
                 mae, psnr, ssim = self.clients[i].evaluation(direction='from_a_to_b') #,fid
                 infor_1 = '{} [{} -> {}] mae: {:.4f} psnr: {:.4f} ssim: {:.4f}'.format(
                     infor, self.para_dict['source_domain'], self.para_dict['target_domain'], mae, psnr, ssim)
-                # if self.para_dict['fid']:
-                #     infor_1 = '{} fid: {:.4f}'.format(infor_1, fid)
                 print(infor_1)
 
 
@@ -239,8 +205,6 @@ class FederatedTrain():
         mae, psnr, ssim= self.server.evaluation(direction='from_a_to_b') #,fid
         infor = '[Round {}/{}] [{} -> {}] mae: {:.4f} psnr: {:.4f} ssim: {:.4f}'.format(
                         self.round+1, self.para_dict['num_round'], self.para_dict['source_domain'], self.para_dict['target_domain'], mae, psnr, ssim)
-        if self.para_dict['fid']:
-            infor = '{} fid: {:.4f}'.format(infor, fid)
         print(infor)
 
 
@@ -251,8 +215,6 @@ class FederatedTrain():
         mae, psnr, ssim, fid = self.server.evaluation(direction='from_b_to_a')
         infor = '[Round {}/{}] [{} -> {}] mae: {:.4f} psnr: {:.4f} ssim: {:.4f}'.format(
                         self.round+1, self.para_dict['num_round'], self.para_dict['target_domain'], self.para_dict['source_domain'], mae, psnr, ssim)
-        if self.para_dict['fid']:
-            infor = '{} fid: {:.4f}'.format(infor, fid)
         print(infor)
 
         if self.para_dict['save_log']:

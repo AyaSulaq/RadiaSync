@@ -65,8 +65,6 @@ class BASE_DATASET(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         path_a, path_b, i = self.fedmed_dataset[index]
-        # moda_a = np.load('{}/{}/{}.npy'.format(self.dataset_path, self.modality_a.upper(), path_a))
-        # moda_b = np.load('{}/{}/{}.npy'.format(self.dataset_path, self.modality_b.upper(), path_b))
         moda_a = np.load('{}/{}/{}'.format(self.dataset_path, self.modality_a.upper(), path_a))
         moda_b = np.load('{}/{}/{}'.format(self.dataset_path, self.modality_b.upper(), path_b))
         
@@ -111,20 +109,6 @@ class BASE_DATASET(torch.utils.data.Dataset):
         """
         if self.noise_type == 'normal':
             assert 'size' in list(self.t[0].keys()) 
-        # elif self.noise_type == 'slight':
-        #     assert 'degrees' in list(self.t[0].keys()) 
-        #     assert 'translate' in list(self.t[0].keys()) 
-        #     assert 'scale' in list(self.t[0].keys()) 
-        #     assert 'size' in list(self.t[0].keys()) 
-        # elif self.noise_type == 'gaussian':
-        #     assert 'mu' in list(self.t[0].keys()) 
-        #     assert 'sigma' in list(self.t[0].keys()) 
-        #     assert 'size' in list(self.t[0].keys()) 
-        # elif self.noise_type == 'severe':
-        #     assert 'degrees' in list(self.t[0].keys()) 
-        #     assert 'translate' in list(self.t[0].keys()) 
-        #     assert 'scale' in list(self.t[0].keys()) 
-        #     assert 'size' in list(self.t[0].keys()) 
         else:
             raise ValueError('Noise Hyperparameter Setting Incorrect')
 
@@ -139,39 +123,6 @@ class BASE_DATASET(torch.utils.data.Dataset):
             self.transform_b = transforms.Compose([transforms.ToPILImage(), 
                                                    transforms.Resize(size=self.t[1]['size']), 
                                                    ToTensor()])
-        # elif self.noise_type == 'slight':
-        #     self.transform_a = transforms.Compose([transforms.ToPILImage(), 
-        #                                             transforms.RandomAffine(degrees=self.t[0]['degrees'], translate=self.t[0]['translate'], 
-        #                                                                     scale=self.t[0]['scale'], fillcolor=0), 
-        #                                             transforms.Resize(size=self.t[0]['size']),
-        #                                             ToTensor()])
-        #     self.transform_b = transforms.Compose([transforms.ToPILImage(), 
-        #                                            transforms.RandomAffine(degrees=self.t[1]['degrees'], translate=self.t[1]['translate'], 
-        #                                                                     scale=self.t[1]['scale'], fillcolor=0), 
-        #                                            transforms.Resize(size=self.t[1]['size']), 
-        #                                            ToTensor()])
-        # elif self.noise_type == 'gaussian':
-        #     self.transform_a = transforms.Compose([transforms.ToPILImage(), 
-        #                                            transforms.Resize(size=self.t[0]['size']),
-        #                                            ToTensor(),
-        #                                            GaussianNoise(mean=self.t[0]['mu'],
-        #                                                          std=self.t[0]['sigma'])])
-        #     self.transform_b = transforms.Compose([transforms.ToPILImage(), 
-        #                                            transforms.Resize(size=self.t[1]['size']), 
-        #                                            ToTensor(),
-        #                                            GaussianNoise(mean=self.t[1]['mu'],
-        #                                                          std=self.t[1]['sigma'])])
-        # elif self.noise_type == 'severe':
-        #     self.transform_a = transforms.Compose([transforms.ToPILImage(), 
-        #                                         #    transforms.RandomAffine(degrees=self.t[0]['degrees'], translate=self.t[0]['translate'], 
-        #                                         #                             scale=self.t[0]['scale'], fillcolor=0), 
-        #                                            transforms.Resize(size=self.t[0]['size']),
-        #                                            ToTensor()])
-        #     self.transform_b = transforms.Compose([transforms.ToPILImage(), 
-        #                                         #    transforms.RandomAffine(degrees=self.t[1]['degrees'], translate=self.t[1]['translate'], 
-        #                                         #                             scale=self.t[1]['scale'], fillcolor=0), 
-        #                                            transforms.Resize(size=self.t[1]['size']), 
-        #                                            ToTensor()])
         else:
             raise ValueError('Noise Type Setting Incorrect')
                                                    
@@ -242,23 +193,6 @@ class BASE_DATASET(torch.utils.data.Dataset):
         for i in range(len(self.client_weights)):
             data_num = int(self.data_num * self.client_weights[i])
 
-            # if self.data_mode == 'mixed':
-            #     paired_num = int(data_num * self.data_paired_weight)
-            #     unpaired_num = data_num - paired_num
-
-            #     if paired_num > self.data_total_num_list[i][0] or unpaired_num > self.data_total_num_list[i][1]:
-            #         print('client: {}'.format(i))
-            #         print('desire num of paired: {}, original num: {}'.format(paired_num, self.data_total_num_list[i][0]))
-            #         print('desire num of unpaired: {}, original num: {}'.format(unpaired_num, self.data_total_num_list[i][1]))
-            #         raise ValueError('Not Enough Desired Data')
-
-            #     paired_data = self.client_data[i][0][:paired_num]
-            #     unpaired_data = self.client_data[i][1][:unpaired_num]
-            #     mixed_data = paired_data + unpaired_data
-            #     random.shuffle(mixed_data)
-            #     self.client_data_indices.append(mixed_data)
-            #     self.fedmed_dataset = self.all_data
-
             if self.data_mode == 'paired':
                 paired_data = []
                 if self.learn_mode == 'train':
@@ -270,19 +204,6 @@ class BASE_DATASET(torch.utils.data.Dataset):
                 for idx in paired_data:
                     data.append(self.all_data[idx])
                 self.fedmed_dataset = data ###original code
-
-
-            # elif self.data_mode == 'unpaired':
-            #     unpaired_data = []
-            #     if self.learn_mode == 'train':
-            #         unpaired_data = self.client_data[i][1][:data_num]
-            #     else:
-            #         unpaired_data = self.client_data[i][1][:6000] # manually set
-            #     random.shuffle(unpaired_data)
-            #     data = []
-            #     for idx in unpaired_data:
-            #         data.append(self.all_data[idx])
-            #     self.fedmed_dataset = data
                
             else:
                 raise NotImplementedError('Data Mode is Wrong')

@@ -28,15 +28,8 @@ class CycleGAN(Base):
         self.generator_from_a_to_b = CycleGen().to(self.device)
         self.generator_from_b_to_a = CycleGen().to(self.device)
 
-        self.discriminator_from_a_to_b = CycleDis().to(self.device) #auxiliary_rotation=self.config['auxiliary_rotation'],
-                                                    #   auxiliary_translation=self.config['auxiliary_translation'],
-                                                    #   auxiliary_scaling=self.config['auxiliary_scaling'],
-                                                    #   num_augmentation=self.config['num_augmentation']).to(self.device)
-
-        self.discriminator_from_b_to_a = CycleDis().to(self.device) #auxiliary_rotation=self.config['auxiliary_rotation'],
-        #                                               auxiliary_translation=self.config['auxiliary_translation'],
-        #                                               auxiliary_scaling=self.config['auxiliary_scaling'],
-        #                                               num_augmentation=self.config['num_augmentation']).to(self.device)
+        self.discriminator_from_a_to_b = CycleDis().to(self.device) 
+        self.discriminator_from_b_to_a = CycleDis().to(self.device)
 
         # Adam optimizer
         self.optimizer_generator_from_a_to_b = torch.optim.Adam(self.generator_from_a_to_b.parameters(),
@@ -67,7 +60,7 @@ class CycleGAN(Base):
         #                                         max_lr=max_lr,
         #                                         step_size_up=2000,
         #                                         cycle_momentum=False,
-        #                                         mode='triangular2')  # Other modes: 'triangular2', 'exp_range'
+        #                                         mode='triangular')  # Other modes: 'triangular2', 'exp_range'
         #                                         # gamma=1.0,  # Only used when mode='exp_range'
         #                                         # scale_fn=None,  # Custom scaling policy function
         #                                         # scale_mode='cycle',  # How scaling is applied
@@ -80,17 +73,17 @@ class CycleGAN(Base):
         #                                         max_lr=max_lr,
         #                                         step_size_up=2000,
         #                                         cycle_momentum=False,
-        #                                         mode='triangular2')
+        #                                         mode='triangular')
         # self.optimizer_discriminator_from_a_to_b = torch.optim.lr_scheduler.CyclicLR(self.adam_discriminator_from_a_to_b,base_lr=base_lr,
         #                                         max_lr=max_lr,
         #                                         step_size_up=2000,
         #                                         cycle_momentum=False,
-        #                                         mode='triangular2')
+        #                                         mode='triangular')
         # self.optimizer_discriminator_from_b_to_a = torch.optim.lr_scheduler.CyclicLR(self.adam_discriminator_from_b_to_a,base_lr=base_lr,
         #                                         max_lr=max_lr,
         #                                         step_size_up=2000,
         #                                         cycle_momentum=False,
-        #                                         mode='triangular2')
+        #                                         mode='triangular')
 
     def train_epoch(self, inf=''):
         Tensor = torch.cuda.FloatTensor

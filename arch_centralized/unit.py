@@ -67,12 +67,6 @@ class Unit(Base):
         self.lr_scheduler_discriminator_from_b_to_a = torch.optim.lr_scheduler.LambdaLR(self.optimizer_discriminator_from_b_to_a, 
                         lr_lambda=LambdaLR(self.config['num_epoch'], 0, self.config['decay_epoch']).step)                                                              
 
-        # # differential privacy
-        # if self.config['diff_privacy']:
-        #     self.discriminator_from_a_to_b.models[0].register_backward_hook(self.master_hook_adder)
-        #     self.discriminator_from_b_to_a.models[0].register_backward_hook(self.master_hook_adder)
-
-
     def collect_generated_images(self, batch):
         real_a = batch[self.config['source_domain']].to(self.device) 
         real_b = batch[self.config['target_domain']].to(self.device)           

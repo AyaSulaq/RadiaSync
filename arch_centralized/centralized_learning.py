@@ -62,8 +62,8 @@ class CentralizedTrain():
         print('work dir: {}'.format(self.file_path))
         print('noise type: {}'.format(self.para_dict['noise_type']))
 
-        if self.para_dict['noise_type'] == 'reg':
-            print('noise level: {}'.format(self.para_dict['noise_level']))
+        # if self.para_dict['noise_type'] == 'reg':
+        #     print('noise level: {}'.format(self.para_dict['noise_level']))
 
 
     def load_data(self):
@@ -139,7 +139,7 @@ class CentralizedTrain():
                                            noise_type=self.para_dict['noise_type'],
                                            learn_mode='train',
                                            extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
-                                           transform_data=self.severe_transform,
+                                           transform_data=self.noise_transform,
                                            data_mode='paired',
                                            assigned_data=self.para_dict['single_img_infer'],
                                            assigned_images=self.para_dict['assigned_images']) 
@@ -148,7 +148,7 @@ class CentralizedTrain():
                                            noise_type=self.para_dict['noise_type'],
                                            learn_mode='test',
                                            extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
-                                           transform_data=self.severe_transform,
+                                           transform_data=self.noise_transform,
                                            data_mode='paired',
                                            assigned_data=self.para_dict['single_img_infer'],
                                            assigned_images=self.para_dict['assigned_images']) 
@@ -157,7 +157,7 @@ class CentralizedTrain():
                                            noise_type=self.para_dict['noise_type'],
                                            learn_mode='test',
                                            extract_slice=[self.para_dict['es_lower_limit'], self.para_dict['es_higher_limit']],
-                                           transform_data=self.severe_transform,
+                                           transform_data=self.noise_transform,
                                            data_mode='paired',
                                            assigned_data=self.para_dict['single_img_infer'],
                                            assigned_images=self.para_dict['assigned_images']) 
@@ -168,8 +168,8 @@ class CentralizedTrain():
         self.train_loader = DataLoader(self.train_dataset,
                                        batch_size=self.para_dict['batch_size'],
                                        drop_last=True,
-                                       num_workers=self.para_dict['num_workers'],
-                                       sampler=SubsetRandomSampler(self.client_data_list[0]))
+                                       num_workers=self.para_dict['num_workers'])
+                                       #sampler=SubsetRandomSampler(self.client_data_list[0]))
         self.valid_loader = DataLoader(self.valid_dataset, num_workers=self.para_dict['num_workers'],
                                  batch_size=self.para_dict['batch_size'], shuffle=False)
         self.assigned_loader = DataLoader(self.assigned_dataset, num_workers=self.para_dict['num_workers'],
@@ -214,15 +214,6 @@ class CentralizedTrain():
             save_model(gener_from_b_to_a, '{}/checkpoint/g_from_b_to_a'.format(self.file_path), self.para_dict, psnr)
             save_model(discr_from_a_to_b, '{}/checkpoint/d_from_a_to_b'.format(self.file_path), self.para_dict, psnr)
             save_model(discr_from_b_to_a, '{}/checkpoint/d_from_b_to_a'.format(self.file_path), self.para_dict, psnr)
-        
-        # elif self.para_dict['model'] == 'unit':
-        #     gener_from_a_to_b_enc, gener_from_a_to_b_dec, gener_from_b_to_a_enc, gener_from_b_to_a_dec, discr_from_a_to_b, discr_from_b_to_a = self.trainer.get_model()
-        #     save_model(gener_from_a_to_b_enc, '{}/checkpoint/g_from_a_to_b_enc'.format(self.file_path), self.para_dict, psnr)
-        #     save_model(gener_from_a_to_b_dec, '{}/checkpoint/g_from_a_to_b_dec'.format(self.file_path), self.para_dict, psnr)
-        #     save_model(gener_from_b_to_a_enc, '{}/checkpoint/g_from_b_to_a_enc'.format(self.file_path), self.para_dict, psnr)
-        #     save_model(gener_from_b_to_a_dec, '{}/checkpoint/g_from_b_to_a_dec'.format(self.file_path), self.para_dict, psnr)
-        #     save_model(discr_from_a_to_b, '{}/checkpoint/d_from_a_to_b'.format(self.file_path), self.para_dict, psnr)
-        #     save_model(discr_from_b_to_a, '{}/checkpoint/d_from_b_to_a'.format(self.file_path), self.para_dict, psnr)
 
 
     def work_flow(self):
@@ -233,8 +224,6 @@ class CentralizedTrain():
         infor = '[Epoch {}/{}] [{} -> {}] mae: {:.4f} psnr: {:.4f} ssim: {:.4f}'.format(
             self.epoch+1, self.para_dict['num_epoch'], self.para_dict['source_domain'], self.para_dict['target_domain'], mae, psnr, ssim)
 
-        # if self.para_dict['fid']:
-        #     infor = '{} fid: {:.4f}'.format(infor, fid)
         print(infor)
         
         if self.para_dict['save_log']:
@@ -245,9 +234,6 @@ class CentralizedTrain():
 
         infor = '[Epoch {}/{}] [{} -> {}] mae: {:.4f} psnr: {:.4f} ssim: {:.4f}'.format(
             self.epoch+1, self.para_dict['num_epoch'], self.para_dict['target_domain'], self.para_dict['source_domain'], mae, psnr, ssim)
-
-        # if self.para_dict['fid']:
-        #     infor = '{} fid: {:.4f}'.format(infor, fid)
         print(infor)
 
         if self.para_dict['save_log']:
