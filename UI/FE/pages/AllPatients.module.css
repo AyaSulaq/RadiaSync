@@ -1,0 +1,22 @@
+/* AllPatients.module.css */
+
+.rain-animation-container {
+  position: relative;
+  height: 100%;
+}
+
+.rain-card {
+  position: absolute;
+  animation: rain 1s linear infinite;
+}
+
+@keyframes rain {
+  from {
+    transform: translateY(-300%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(300%);
+    opacity: 1;
+  }
+}
